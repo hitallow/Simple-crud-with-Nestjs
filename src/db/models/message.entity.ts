@@ -1,45 +1,47 @@
-import { ObjectType, Field } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import {
-  Column,
-  UpdateDateColumn,
-  CreateDateColumn,
-  PrimaryGeneratedColumn,
   Entity,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Column,
+  JoinColumn,
   ManyToOne,
 } from 'typeorm';
 import { User } from './user.entity';
 
-@ObjectType('Message', {
-  isAbstract: false,
-  description: 'Mensagens enviadas por usuários',
-})
+@ObjectType()
 @Entity({ name: 'messages' })
 export class Message {
-  @PrimaryGeneratedColumn()
   @Field()
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
   @Field()
-  content: string;
-
-  @CreateDateColumn()
-  @Field()
-  created_at: Date;
-
-  @UpdateDateColumn()
-  @Field()
-  updated_at: Date;
-
   @Column({ name: 'user_id' })
-  @Field()
   userId: number;
 
-  @Field(() => User,{
-    description : 'Usuário dono da mensagen'
-  })
-  @ManyToOne(() => User, user => user.messages)
-  user: User;
-  
+  @Field()
+  @Column()
+  content: string;
 
+  @Field()
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
+
+  @Field()
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
+
+  @Field(() => User)
+  user: User;
+
+  // Associations
+  @ManyToOne(
+    () => User,
+    user => user.messageConnection,
+    { primary: true },
+  )
+  @JoinColumn({ name: 'user_id' })
+  userConnection: User;
 }

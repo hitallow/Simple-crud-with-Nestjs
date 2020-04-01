@@ -1,39 +1,37 @@
+import { Field, ObjectType } from '@nestjs/graphql';
 import {
   Column,
-  UpdateDateColumn,
   CreateDateColumn,
-  PrimaryGeneratedColumn,
-  OneToMany,
   Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
-import { ObjectType, Field } from '@nestjs/graphql';
-
 import { Message } from './message.entity';
 
-@ObjectType('users')
-@Entity('users')
+@ObjectType()
+@Entity({ name: 'users' })
 export class User {
-  @PrimaryGeneratedColumn()
   @Field()
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
   @Field()
+  @Column()
   email: string;
-
 
   @Field()
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
-  
+
   @Field()
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
+  // Associations
   @OneToMany(
     () => Message,
-    message => message.user,
+    message => message.userConnection,
   )
-  messages: Message[];
-
+  messageConnection: Promise<Message[]>;
 }
