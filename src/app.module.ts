@@ -6,11 +6,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import * as ormconfig from './config/orm';
 import { MessageGraphQLModule } from './modules/messageGraphQL/message-graphQL.module';
 import { GraphQLModule } from '@nestjs/graphql';
+import { MessageRestModule } from './modules/messageRest/message-rest.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(ormconfig),
     MessageGraphQLModule,
+    MessageRestModule,
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
       playground: true,
