@@ -29,9 +29,11 @@ export class User {
   updatedAt: Date;
 
   // Associations
+  @Field(() => [Message])
   @OneToMany(
     () => Message,
-    message => message.userConnection,
+    message => message.user,
+    {lazy : true,}
   )
-  messageConnection: Promise<Message[]>;
+  messages: Promise<Message[]>;
 }

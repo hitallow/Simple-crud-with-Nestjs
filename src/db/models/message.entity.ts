@@ -5,8 +5,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Column,
-  JoinColumn,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { User } from './user.entity';
 
@@ -17,7 +17,6 @@ export class Message {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Field()
   @Column({ name: 'user_id' })
   userId: number;
 
@@ -33,15 +32,13 @@ export class Message {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
-  @Field(() => User)
-  user: User;
-
   // Associations
   @ManyToOne(
     () => User,
-    user => user.messageConnection,
-    { primary: true },
+    user => user.messages,
+    { lazy: true },
   )
+  @Field(() => User)
   @JoinColumn({ name: 'user_id' })
-  userConnection: User;
+  user: User;
 }
