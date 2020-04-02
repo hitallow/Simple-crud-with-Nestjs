@@ -18,6 +18,10 @@ const graphQLImports = [UserResolver, MessageResolver];
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
       playground: true,
+      subscriptions: {
+        keepAlive: Infinity,
+      },
+      installSubscriptionHandlers: true,
     }),
   ],
   controllers: [AppController],

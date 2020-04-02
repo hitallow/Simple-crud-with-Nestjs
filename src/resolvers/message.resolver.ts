@@ -1,18 +1,18 @@
-import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
+import { Resolver, Query, Args, Mutation, Subscription } from '@nestjs/graphql';
 import { Message } from 'src/db/models/message.entity';
 import { MessageInput } from './input/message.input';
-import { MessageService} from '../modules/repo/services/message.service'
+import { MessageService } from '../modules/repo/services/message.service';
+import { PubSub } from 'graphql-subscriptions';
+
+export const MESSAGE_ADDED = 'messageAdded';
+
+const pubSub = new PubSub();
 @Resolver(() => Message)
 export class MessageResolver {
   constructor(protected messageService: MessageService) {}
   @Query(() => [Message])
   public messages(): Promise<Message[]> {
     return this.messageService.messageRepository.find();
-  }
-
-  @Query(() => Message)
-  public getUser(@Args('id') id: string): Promise<Message> {
-    return this.messageService.messageRepository.findOne(id);
   }
 
   @Mutation(() => Message)
@@ -22,7 +22,16 @@ export class MessageResolver {
       userId: data.user_id,
     });
 
-    return await this.messageService.messageRepository.save(message);
+    const response = await this.messageService.messageRepository.save(message);
+
+    pubSub.publish(MESSAGE_ADDED, { [MESSAGE_ADDED]: message });
+
+    return response;
+  }
+
+  @Subscription(() => Message)
+  public async messageAdded() {
+    return pubSub.asyncIterator(MESSAGE_ADDED);
   }
 
   @Mutation(() => Message, { nullable: true })
