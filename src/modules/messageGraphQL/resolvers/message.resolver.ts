@@ -1,7 +1,7 @@
 import { Resolver, Query, Args, Mutation, Subscription } from '@nestjs/graphql';
 import { Message } from 'src/db/models/message.entity';
-import { MessageInput } from './input/message.input';
-import { MessageService } from '../modules/repo/services/message.service';
+import { MessageInput } from '../input/message.input';
+import { MessageService } from '../services/message.service';
 import { PubSub } from 'graphql-subscriptions';
 
 export const MESSAGE_ADDED = 'messageAdded';

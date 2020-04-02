@@ -1,7 +1,7 @@
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
-import { User } from '../db/models/user.entity';
-import { UserInput } from './input/user.input';
-import { UserService } from '../modules/repo/services/user.service';
+import { User } from '../../../db/models/user.entity';
+import { UserInput } from '../input/user.input';
+import { UserService } from '../services/user.service';
 @Resolver(() => User)
 export class UserResolver {
   constructor(protected userService: UserService) {}

@@ -4,17 +4,13 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import * as ormconfig from './config/orm';
-import { RepoModule } from './modules/repo/repo.module';
-import { UserResolver } from './resolvers/user.resolver';
+import { MessageGraphQLModule } from './modules/messageGraphQL/message-graphQL.module';
 import { GraphQLModule } from '@nestjs/graphql';
-import { MessageResolver } from './resolvers/message.resolver';
 
-const graphQLImports = [UserResolver, MessageResolver];
 @Module({
   imports: [
     TypeOrmModule.forRoot(ormconfig),
-    RepoModule,
-    ...graphQLImports,
+    MessageGraphQLModule,
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
       playground: true,
